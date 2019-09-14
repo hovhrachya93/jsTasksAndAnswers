@@ -20,7 +20,15 @@
 
 {
     //// 
-    const isOdd = number => number < 10 ? number % 2 > 0 : (number % 10 % 2 > 0 && isOdd((number - number % 10) / 10)) % 2 > 0;
+    const isOdd = number => {
+        let last = number % 10;
+        // return number < 10 ? number % 2 > 0 : (isOdd((number - last) / 10)) % 2 > 0;
+        if (number < 10) {
+          return number % 2 > 0
+        } else {
+            return (isOdd((number - last) / 10)) % 2 > 0;
+        }
+    }
     ////
 }
 
@@ -33,23 +41,19 @@
     //// 
     const longestWord = inputString => {
         let longest = "";
-        let lastWorld = "";
-        let output;
         let point = 0;
-    
+        let prevWorld;
         for (let i = 0; i < inputString.length; i++) {
+            prevWorld = inputString.slice(point, i).replace(/[^a-zA-Z ]/g, "");
             if (inputString[i] == " ") {
-                if (inputString.slice(point, i).length < longest.length) {
-                    lastWorld = inputString.slice(i).replace(/[^a-zA-Z ]/g, "");
+                if (prevWorld.length < longest.length) {
                 }
                 else
-                    longest = inputString.slice(point, i).replace(/[^a-zA-Z ]/g, "");
-                     point = i + 1
+                    longest = prevWorld;
+                point = i + 1;
             }
         };
-    
-        output = lastWorld.length > longest.length ? lastWorld : longest;
-        return output;
+        return longest;
     }
     ////
 }
@@ -89,7 +93,16 @@
     /////      
     const allEvenNumbersBetweenArgs = (num1, num2) => {
         let output = "";
-        const check = i => i < 10 ? (i % 2 == 0) : i % 10 % 2 == 0 && check((i - i % 10) / 10);
+        let last;
+        // const check = i => i < 10 ? (i % 2 == 0) : i % 10 % 2 == 0 && check((i - i % 10) / 10);
+        const check = i => {
+            last = i % 10;
+            if (i < 10) {
+                return (i % 2 == 0)
+            } else {
+                return last % 2 == 0 && check((i - last) / 10)
+            }
+        }
     
         for (let i = num1 + 1; i < num2; i++) {
             if (check(i)) {
