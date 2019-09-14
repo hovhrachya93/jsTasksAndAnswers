@@ -129,18 +129,14 @@
 {
     //// 
     const digitsContainsNumber = (number, digit) => {
-        let check;
-        let answer;
         while (digit >= 1) {
             if (number === digit % 10) {
-                check = 1;
-                break;
+                return "Yes";
+            } else {
+                digit = Math.floor(digit / 10);
             }
-            digit = Math.floor(digit / 10);
-            check = 0;
         }
-        answer = check === 1 ? check === 0 ? check : "Yes" : "No";
-        return answer;
+        return "No";
     }
     ////
 }
@@ -169,9 +165,17 @@
         let biggest = 0;
         let smallest = 9;
         let answer;
+        let lastnum;
         while (num >= 1) {
-            num % 10 > biggest ? biggest = num % 10 : null
-            num % 10 < smallest ? smallest = num % 10 : null
+            lastnum = num % 10
+            if(lastnum > biggest){
+                biggest = lastnum
+            }
+            if(lastnum < smallest ){
+                smallest = lastnum 
+            }
+            // lastnum > biggest ? biggest = lastnum : null
+           // lastnum < smallest ? smallest = lastnum : null
             num = Math.floor(num / 10)
         }
         answer = biggest - smallest;
