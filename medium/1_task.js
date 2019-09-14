@@ -44,7 +44,7 @@
         let point = 0;
         let prevWorld;
         for (let i = 0; i < inputString.length; i++) {
-            prevWorld = inputString.slice(point, i).replace(/[^a-zA-Z ]/g, "");
+            prevWorld = inputString.substring(point, i).replace(/[^a-zA-Z ]/g, "");
             if (inputString[i] == " ") {
                 if (prevWorld.length < longest.length) {
                 }
