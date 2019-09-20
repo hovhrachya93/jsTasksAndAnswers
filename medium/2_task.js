@@ -6,27 +6,18 @@
 {
     //// 
     const multNegativeItems = (arr) => {
-        const checkisArray = arr.every(itemArr => Array.isArray(itemArr) ? true : false)
+        const checkisArray = arr.every(itemArr => Array.isArray(itemArr))
         if (!checkisArray) {
             return 'Invalid Argument'
         }
     
-        const filtNegativeArr = arr.map((subArr) => subArr.filter(item => item < 0))
-        const checkisNegativArr = filtNegativeArr.filter(array => array.length === 0 ? false : true);
-        if (checkisNegativArr.length === 0) {
+        const filterNegativeArr = arr.map((subArr) => subArr.filter(item => item < 0))
+        if (filterNegativeArr.filter(array => array.length !== 0).length === 0) {
             return 'No negativs'
         }
     
-        const findMaxNegativeItem = filtNegativeArr.map(subNegativeArr => {
-            if (subNegativeArr.length === 0) {
-                return true
-            };
-            return Math.max(...subNegativeArr)
-        })
-    
-        if (checkisArray) {
-            return findMaxNegativeItem.reduce((acc, item) => acc * item);
-        }
+        const findMaxNegativeItem = filterNegativeArr.map(subNegativeArr => subNegativeArr.length === 0 ? true : Math.max(...subNegativeArr))
+        return checkisArray ? findMaxNegativeItem.reduce((acc, item) => acc * item) : NaN
     }
     ////
 }
@@ -84,7 +75,7 @@
 
 {
     //// 
-    const conteinElementOnce = arr => arr.filter((item, index) => arr.indexOf(item) >= index);
+    const conteinElementOnce = arr => arr.filter((item, index) => arr.indexOf(item) === index);
     ////
 }
 
@@ -95,12 +86,9 @@
 {
     //// 
     const productsBetweenNeighbours = arr => {
-        const outputArray = [];
-        arr.reduce((acc, item, i, array) => {
-            outputArray[i] = array[i] * array[i + 1];
-        }, NaN)
+        const outputArray = arr.map((array, i) => array * arr[i + 1])
         outputArray.pop();
-        return outputArray
+       return outputArray
     }
     ////
 }
@@ -112,20 +100,20 @@
 {
     //// 
     const invertObjectKeysValues = InputObj => {
-        const outputObj = {};
+        const outputObject = {};
         for (let key in InputObj) {
           if (InputObj.hasOwnProperty(key)) {
-            if (!outputObj[InputObj[key]]) {
-              outputObj[InputObj[key]] = key;
+            if (!outputObject[InputObj[key]]) {
+              outputObject[InputObj[key]] = key;
             } else {
-              if (!Array.isArray(outputObj[InputObj[key]])) {
-                outputObj[InputObj[key]] = [outputObj[InputObj[key]]];
+              if (!Array.isArray(outputObject[InputObj[key]])) {
+                outputObject[InputObj[key]] = [outputObject[InputObj[key]]];
               }
-              outputObj[InputObj[key]].push(key);
+              outputObject[InputObj[key]].push(key);
             }
           }
         }
-        return outputObj;
+        return outputObject;
       }
     ////
 }
@@ -135,6 +123,19 @@
 
 {
     //// 
-
+    const deepCopy = obj => {
+        const newCreatedObject = {};
+        for (let key in obj) {
+            const objectValue = obj[key];
+            typeof(objectValue) === "object" ? newCreatedObject[key] = deepCopy(objectValue) : newCreatedObject[key] = objectValue;
+        }
+        return newCreatedObject
+    }
+    
+    const check = _ => {
+        const a = { a: '1', b: { a: 2 } }
+        const b = deepCopy(a)
+        return b.b.a !== 123
+    }
     ////
 }
