@@ -16,8 +16,10 @@
             return 'No negativs'
         }
     
-        const findMaxNegativeItem = filterNegativeArr.map(subNegativeArr => subNegativeArr.length === 0 ? true : Math.max(...subNegativeArr))
-        return checkisArray ? findMaxNegativeItem.reduce((acc, item) => acc * item) : NaN
+        const findMaxNegativeItem = filterNegativeArr
+        .map(subNegativeArr => subNegativeArr.length === 0 ? 1 : Math.max(...subNegativeArr))
+        .reduce((acc, item) => acc * item)
+            return findMaxNegativeItem
     }
     ////
 }
@@ -127,7 +129,7 @@
         const newCreatedObject = {};
         for (let key in obj) {
             const objectValue = obj[key];
-            typeof(objectValue) === "object" ? newCreatedObject[key] = deepCopy(objectValue) : newCreatedObject[key] = objectValue;
+            objectValue && typeof(objectValue) === "object" ? newCreatedObject[key] = deepCopy(objectValue) : newCreatedObject[key] = objectValue;
         }
         return newCreatedObject
     }
