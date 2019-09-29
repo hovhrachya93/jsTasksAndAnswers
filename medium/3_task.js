@@ -9,24 +9,27 @@
     class Rectangle {
         constructor(length, width) {
             this.length = length,
-            this.width = width,
-            this.toString = `object rectangle length ${this.length},width ${this.width}`
+            this.width = width
+        }
+
+        get toString() {
+            return `object rectangle length ${this.length},width ${this.width}`
+         } 
+ 
+        get rectangleLength() {
+            return this.length;
         }
     
-        get length() {
-            return this._length;
+        get rectangleWidth() {
+            return this.width;
         }
     
-        get width() {
-            return this._width;
+        set rectangleLength(value) {
+            this.length = value
         }
     
-        set length(value) {
-            this._length = value
-        }
-    
-        set width(value) {
-            this._width = value
+        set rectangleWidth(value) {
+            this.width = value
         }
     
         get area() {
@@ -201,9 +204,10 @@
         }
     };
     
-    mercedes = new Car('Mercedes', '#6b7078', 80)
-    bmw = new Car('BMW', '#d7be5f', 140)
-    audi = new Car('Audi', '#024476', 110)
+    const randomRange = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+    const mercedes = new Car('Mercedes', '#6b7078', randomRange(60,120))
+    const bmw = new Car('BMW', '#d7be5f', randomRange(60,120))
+    const audi = new Car('Audi', '#024476', randomRange(60,120))
     
     const competition = _ => {
         mercedes.start();
@@ -250,10 +254,10 @@
         this.reset();
     };
     
-    
-    const mercedes = new Car('Mercedes', '#6b7078', 80)
-    const bmw = new Car('BMW', '#d7be5f', 140)
-    const audi = new Car('Audi', '#024476', 110)
+    const randomRange = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+    const mercedes = new Car('Mercedes', '#6b7078', randomRange(60,120))
+    const bmw = new Car('BMW', '#d7be5f', randomRange(60,120))
+    const audi = new Car('Audi', '#024476', randomRange(60,120))
     
     const competition = _ => {
         mercedes.start();
