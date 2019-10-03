@@ -101,56 +101,88 @@
 
 {
     //// 
-    class Autor {
+    class Author {
         constructor(name, email, gender) {
-            this.autorName = name;
-            this.autorEmail = email;
-            this.autorGender = gender;
+            this.name = name;
+            this.email = email;
+            this.gender = gender
         }
+    
         get name() {
-            return this.autorName;
+            return this._name;
         }
         get email() {
-            return this.autorEmail;
+            return this._email;
         }
         get gender() {
-            return this.autorGender;
+            return this._gender;
+        }
+        set name(name) {
+            if (typeof name === 'string' && name.length > 0) {
+                return this._name = name;
+            }
+        }
+        set email(email) {
+            if (typeof email === 'string' && /\S+@\S+\.\S+/.test(email)) {
+                return this._email = email;
+            }
+        }
+        set gender(gender) {
+            if (typeof gender === 'string' && (gender === 'Male' || gender === 'Female')) {
+                return this._gender = gender;
+            }
         }
         toString() {
-            return `My name is ${this.autorName}`
+            return `Author with name: ${this._name} and email: ${this._email}`
         }
-    }
+     }
     
-    class Book extends Autor {
-        constructor(title, price, quantity) {
-            super();
-            this.bookTitle = title;
-            this.bookPrice = price;
-            this.bookQuantity = quantity;
+    
+     class Book {
+        constructor(title, author, price, quantity) {
+            this._title = title;
+            this.author = author;
+            this.price = price;
+            this.quantity = quantity;
         }
-        
         get title() {
-            return this.bookTitle;
+            return this._title;
         }
-        set title(value) {
-            this.bookTitle = value;
+        get author() {
+            return this._author;
         }
         get price() {
-            return bookPrice;
+            return this._price;
         }
-        set price(value) {
-            this.bookPrice = value;
+        get quantity() {
+            return this._quantity;
         }
-    
+        set title(title) {
+            return this._title = title;
+        }
+        set author(author) {
+            if (author instanceof Author) {
+                return this._author = author;
+            }
+        }
+        set price(price) {
+            if (typeof price === 'number' && price > 0) {
+                return this._price = price;
+            }
+        }
+        set quantity(quantity) {
+            if (typeof quantity === 'number' && quantity >= 0) {
+                return this._quantity = quantity;
+            }
+        }
         getProfit() {
-            return this.bookPrice * this.bookQuantity;
+            return this._price * this._quantity;
         }
         toString() {
-            return `${autor.toString()}, book title is ${this.title}, book price is ${this.bookPrice}, book quantity ${this.bookQuantity}`;
+            return `Book title is: ${this._title} and price: ${this._price}`
         }
-    }
+     }
     
-     autor = new Autor("Kyle ", "kyle-simpson@gmail.com", "male")
      book = new Book("You don't know js", "40$", 1000)
      console.log(book.toString());  
     ////
@@ -179,43 +211,54 @@
 {
     //// 
     class Car {
+        static finishPosition = 100;
+        static haveWinner = false;
         constructor(name, color, speed) {
             this.name = name;
             this.color = color;
             this.speed = speed;
-            this.currentPosition = 0;
+            this.startPosition = 0;
             this.intervalPointer = 0;
         }
-        static finishPosition = 500;
-        reset = _ => this.currentPosition = 0;
+        toString() {
+            return `color of this car is ${this.color}, speed of this car is ${this.speed} px/s`;
+        }
         stop() {
             clearInterval(this.intervalPointer);
-            this.reset();
+            this.startPosition = 0;
         }
         start() {
-            this.intervalPointer = setInterval(_ => {
-                this.currentPosition += this.speed;
-                    console.log(this.currentPosition);
-                if (this.currentPosition >= Car.finishPosition) {
-                    console.log(`${this.name} has stopped in ${this.currentPosition} position`)
-                this.stop()
+            this.intervalPointer = setInterval(() => {
+                this.startPosition += this.speed;
+                if (this.startPosition >= Car.finishPosition) {
+                    this.stop();
+                    if (!Car.haveWinner) {
+                        Car.haveWinner = true;
+                        console.log(`The winner is ${this.name}(${this})`);
+                    }
                 }
-            }, 300);
+            }, 100);
         }
-    };
-    
-    const randomRange = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-    const mercedes = new Car('Mercedes', '#6b7078', randomRange(60,120))
-    const bmw = new Car('BMW', '#d7be5f', randomRange(60,120))
-    const audi = new Car('Audi', '#024476', randomRange(60,120))
-    
-    const competition = _ => {
-        mercedes.start();
-        bmw.start();
-        audi.start();
     }
     
-    competition();
+    const randomRange = () => Math.random() * 150 + 50;
+    
+    const competition = (width) => {
+        Car.haveWinner = false;
+        Car.finishPosition = width;
+    
+        const car1 = new Car('Mercedes', 'grey', randomRange())
+        const car2 = new Car('BMW', 'yellow', randomRange())
+        const car3 = new Car('Audi', 'black', randomRange())
+        const car4 = new Car('Nissan', 'white',  randomRange())
+    
+        car1.start();
+        car2.start();
+        car3.start();
+        car4.start();
+    }
+    
+    competition(500)
     ////
 }
 
