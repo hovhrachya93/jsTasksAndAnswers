@@ -76,7 +76,7 @@
     const observer2 = Rx.Observable(observer => setTimeout(() => observer.next('observer2'), 4000));
     const observer3 = Rx.Observable(observer => setTimeout(() => observer.next('observer3'), 3000));
 
-    const returnLastObservable = args => Rx.Observable(observer => {
+    const returnLastObservable = new Observable(args => Rx.Observable(observer => {
         let count = 0;
         let i = 0;
         const obs = obs => (++count) === 3 ? observer(obs) : 1
@@ -84,7 +84,8 @@
             args[i].subscribe.next(obs)
             i++
         }
-    })
+    }))
+
     returnLastObservable().subscribe({
         next: [observer1, observer2, observer3],
         complete: obs => console.log(obs)
