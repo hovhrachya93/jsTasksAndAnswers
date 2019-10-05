@@ -1,3 +1,21 @@
+/// how fix 
+// new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//         throw new Error("Whoops!");
+//     }, 1000);
+// }).catch(alert);
+
+new Promise(function (resolve, reject) {
+    setTimeout(() => {
+        try {
+            throw new Error("Whoops!");
+        } catch (e) {
+            reject(e);
+        }
+    }, 1000);
+}).catch(alert);
+////
+
 // 1.   You have some 3 async functions. Need to create function which get that 3 functions
 //    and some callback in arguments and call that callback when last async function was 
 //    ending and send that function returning data to callback. That 3 functions have 1 
