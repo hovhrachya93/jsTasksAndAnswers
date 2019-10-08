@@ -1,21 +1,3 @@
-/// how fix 
-// new Promise(function (resolve, reject) {
-//     setTimeout(() => {
-//         throw new Error("Whoops!");
-//     }, 1000);
-// }).catch(alert);
-
-new Promise(function (resolve, reject) {
-    setTimeout(() => {
-        try {
-            throw new Error("Whoops!");
-        } catch (e) {
-            reject(e);
-        }
-    }, 1000);
-}).catch(alert);
-////
-
 // 1.   You have some 3 async functions. Need to create function which get that 3 functions
 //    and some callback in arguments and call that callback when last async function was 
 //    ending and send that function returning data to callback. That 3 functions have 1 
@@ -38,21 +20,22 @@ new Promise(function (resolve, reject) {
             cb(5);
         }, 3000);
     };
-    
+
     const callBack = (val) => console.log(val);
-    
-    function sendReturningData() {
-        let count = 0;
-        let i = 0;
-        const args = arguments;
-        const cb = res => (++count) === 3 ? args[args.length - 1](res) : 1
-        while (i < args.length - 1) {
-            args[i](cb)
-            i++;
+
+    const sendReturningData = (asyncFunctions, cb) => {
+        let counter = asyncFunctions.length;
+        for (const asyncFun of asyncFunctions) {
+            asyncFun((res) => {
+                counter--;
+                if (counter === 0) {
+                    cb(res);
+                }
+            });
         }
     }
-    
-    sendReturningData(async1, async2, async3, callBack);
+
+    sendReturningData([async1, async2, async3], callBack);   
     ////
 }
 
@@ -67,19 +50,44 @@ new Promise(function (resolve, reject) {
     const promise1 = new Promise((resolve, reject) => setTimeout(() => resolve('promise1'), 2000));
     const promise2 = new Promise((resolve, reject) => setTimeout(() => resolve('promise2'), 4000));
     const promise3 = new Promise((resolve, reject) => setTimeout(() => resolve('promise3'), 3000));
-    
-    const returnLastPromise = args => new Promise((resolve, reject) => {
-        let count = 0;
-        let i = 0;
-        const res = (res) => (++count) === 3 ? resolve(res) : 1
-        const rej = err => err ? reject(err) : 1 
-        while(i < args.length){
-            args[i].then(res, rej)
-            i++
+
+    Promise.lastPromise = arr => new Promise((resolve, reject) => {
+
+        if (!Array.isArray(arr)) {
+            return reject(new TypeError('Promise.all accepts an array'));
+        }
+
+        let args = Array.prototype.slice.call(arr);
+        if (args.length === 0){
+            return resolve([]);
+        }
+        
+        let remaining = args.length;
+        const res = (i, val) => {
+            try {
+                if (val && (typeof val === 'object' || typeof val === 'function')) {
+                    let then = val.then;
+                    if (typeof then === 'function') {
+                        then.call(val, (val) => res(i, val), reject);
+                        return;
+                    }
+                }
+
+                args[i] = val;
+                if (--remaining === 0) {
+                    resolve(val);
+                }
+            } catch (ex) {
+                reject(ex);
+            }
+        }
+
+        for (var i = 0; i < args.length; i++) {
+            res(i, args[i]);
         }
     })
-    
-    returnLastPromise([promise1, promise2, promise3]).then((res) => console.log(res), (err) => console.log(err));
+
+    Promise.lastPromise([promise1, promise2, promise3]).then((res) => console.log(res), (err) => console.log(err))
     ////
 }
 
