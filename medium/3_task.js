@@ -6,38 +6,37 @@
 
 {
     //// 
+    const height = Symbol();
+    const width = Symbol();
     class Rectangle {
-        constructor(length, width) {
-            this.length = length,
-            this.width = width
+        constructor(height, width) {
+            this.height = height;
+            this.width = width;
         }
-
         get toString() {
-            return `object rectangle length ${this.length},width ${this.width}`
-         } 
- 
-        get rectangleLength() {
-            return this.length;
+            return `rectangle height is ${this[height]}, width ${this[width]}`
         }
-    
-        get rectangleWidth() {
-            return this.width;
+        get height() {
+            return this[height];
         }
-    
-        set rectangleLength(value) {
-            this.length = value
+        set height(value) {
+            if (value > 0) {
+                this[height] = value;
+            }
         }
-    
-        set rectangleWidth(value) {
-            this.width = value
+        get width() {
+            return this[width];
         }
-    
+        set width(value) {
+            if (value > 0) {
+                this[width] = value;
+            }
+        }
         get area() {
-            return this.length * this.width
+            return this[height] * this[width]
         };
-    
         get perimeter() {
-            return 2 * (this.length + this.width)
+            return 2 * (this[height] + this[width])
         };
     }
     ////
