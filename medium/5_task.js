@@ -124,7 +124,7 @@
             return this[birthYearSymbol];
         }
 
-        get age() {
+        get agebirthYear() {
             ageDifMs = Date.now() - this[birthYearSymbol].getTime();
             ageDate = new Date(ageDifMs);
             return Math.abs(ageDate.getUTCFullYear() - 1970);
@@ -144,6 +144,14 @@
                 this[birthYearSymbol] = value
             } else {
                 throw new Error("You must write all in numbers");
+            }
+        }
+
+        set age(value) {
+            if (typeof (this.value) == "number" && 0 < this.value < 200) {
+                this[ageSymbol] = value
+            } else {
+                throw new Error("You must write all in numbers and in rang from 0 to 200");
             }
         }
     }
@@ -169,8 +177,8 @@
 
    {
        ////
-         "1-in depqum this.printMetode obyekti mej e ev amen angam NEW aneluc kancvum e"
-         "2-rd depqum klini miayn prototype mej ev angam NEW aneluc chi stexci"
+         "Առաջին դեպքում this.printMetode օբյեկտի մեջ է եւ ամեն անգամ NEW անելուց կանչվում է"
+         "երկրորդ դեպքում կլինի միայն prototype-ի մեջ եւ անգամ NEW անելուց չի ստեղծի"
        ////
    }
 
