@@ -92,31 +92,3 @@
 }
 
 
-// 3.   You have some 3 async Observables.
-//    do same work(like 1 and 2) with observables
-//    without using promise(only with observable methods).
-
-{
-    //// 
-    const observer1 = Rx.Observable(observer => setTimeout(() => observer.next('observer1'), 2000));
-    const observer2 = Rx.Observable(observer => setTimeout(() => observer.next('observer2'), 4000));
-    const observer3 = Rx.Observable(observer => setTimeout(() => observer.next('observer3'), 3000));
-
-    const returnLastObservable = new Observable(args => Rx.Observable(observer => {
-        let count = 0;
-        let i = 0;
-        const obs = obs => (++count) === 3 ? observer(obs) : 1
-        while (i < args.length) {
-            args[i].subscribe.next(obs)
-            i++
-        }
-    }))
-
-    returnLastObservable().subscribe({
-        next: [observer1, observer2, observer3],
-        complete: obs => console.log(obs)
-    });
-   ////
-}
-
-

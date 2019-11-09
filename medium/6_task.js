@@ -10,7 +10,7 @@
         if (value === "name") {
             return validateName = element => element.name.includes(" ");
         } else {
-            return validateAge = ({ info }) => info.age > 19 ? true : false;
+            return validateAge = ({ info }) => info.age > 19;
         }
     }
 
@@ -47,7 +47,9 @@
                 // }
 	
 {
-    //// 
+    ////
+{ 
+     // 1. 
     const todoList = {
         todoItems: [],
         addItem(description) {
@@ -74,6 +76,31 @@
         console.log(item);
     }
     ////
+}
+    ////
+    {
+       //2.
+       const todoList = {
+        todoItems: [],
+        *[Symbol.iterator]() {
+            yield* this.todoItems;
+        },
+        addItem( description ) {
+            this.todoItems.push( { description, done: false } );
+            return this;
+        },
+        crossOutItem( index ) {
+            if ( index < this.todoItems.length ) {
+                this.todoItems[index].done = true;
+            }
+            return this;
+        }
+    };
+     
+    const iterableTodoList = todoList;
+        ////
+    }  
+    //// 
 }
 
 
@@ -156,6 +183,35 @@
 
 {
     ////  
-       
+    const promise1 = new Promise((resolve, reject) => setTimeout(() => resolve(15), 200));
+    const promise2 = new Promise((resolve, reject) => setTimeout(() => resolve(17), 600));
+    const promise3 = new Promise((resolve, reject) => setTimeout(() => resolve(42), 500));
+    
+    async function* my_func() {
+        let count = -1;
+        let args = arguments;
+        let p = new Promise((resolve) => {
+            const arr = [],
+            function res(res) {
+                count++;
+                arr[count] = res;
+                if (count === 2) {
+                    resolve(arr.reverse())
+                }
+            }
+            for (let i = 0; i < args.length; i++) {
+                args[i].then(res)
+            }
+        });
+        const arr = await p;
+        yield* arr;
+    }
+    
+    (async () => {
+        let generator = my_func(promise1, promise2, promise3);
+        for await (let value of generator) {
+            console.log(value);
+        }
+    })();      
     ////
 }
